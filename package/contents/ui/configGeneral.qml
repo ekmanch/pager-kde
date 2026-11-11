@@ -109,7 +109,7 @@ KCM.SimpleKCM {
             Kirigami.FormData.label: i18n("Style:")
             model: [
                 i18n("Pills — dots with active pill"),
-                i18n("Dots — rings with filled active dot"),
+                i18n("Dots — translucent dots with solid active dot"),
                 i18n("Numbers")
             ]
         }

@@ -22,6 +22,11 @@ PlasmoidItem {
     readonly property int pillLength: Math.max(dotSize, Plasmoid.configuration.pillLength)
     readonly property int pillThickness: Math.max(2, Math.round(dotSize * 0.6))
     readonly property real ringWidth: Math.max(1, dotSize / 9)
+    // How strongly inactive pills and dots are filled, on top of the inactive
+    // colour's own alpha. Translucent rather than a fixed grey, so it stays soft
+    // over any panel or wallpaper and the active desktop stands out the most.
+    // Dots get less, as their ring already outlines them.
+    readonly property real inactiveFillAlpha: style === styleDots ? 0.4 : 0.5
     readonly property int spacing: Math.max(0, Plasmoid.configuration.spacing)
     readonly property int margin: Math.max(0, Plasmoid.configuration.margin)
 
@@ -231,11 +236,11 @@ PlasmoidItem {
                         radius: Math.min(width, height) / 2
                         antialiasing: true
 
-                        // Pills are always filled; dots are rings that fill in when active.
-                        color: root.style === root.stylePills
-                            ? cell.blendedColor
-                            : Qt.rgba(root.activeColor.r, root.activeColor.g, root.activeColor.b,
-                                      root.activeColor.a * cell.activeness)
+                        // Inactive pills and dots get a translucent fill that turns
+                        // solid when active; dots also keep a full-strength ring.
+                        color: root.mix(Qt.rgba(root.inactiveColor.r, root.inactiveColor.g, root.inactiveColor.b,
+                                                root.inactiveColor.a * root.inactiveFillAlpha),
+                                        root.activeColor, cell.activeness)
                         border.width: root.style === root.styleDots ? root.ringWidth : 0
                         border.color: cell.blendedColor
                     }
