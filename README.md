@@ -9,23 +9,10 @@ the desktops. Colours, opacity, size, spacing and margin are configurable.
 
 Three styles, selectable in the widget settings.
 
-### Pills
-
-Softly filled dots, with the current desktop drawn as a solid white pill.
-
-![Pills style](docs/media/pill-style.gif)
-
-### Dots
-
-Softly filled dots, with the current desktop drawn as a solid dot.
-
-![Dots style](docs/media/dot-style.gif)
-
-### Numbers
-
-Plain desktop numbers, with the current one coloured.
-
-![Numbers style](docs/media/number-style.gif)
+| Pills | Dots | Numbers |
+| :---: | :---: | :---: |
+| ![Pills style](docs/media/pill-style.gif) | ![Dots style](docs/media/dot-style.gif) | ![Numbers style](docs/media/number-style.gif) |
+| Translucent dots, with the current desktop drawn as a solid white pill | Translucent dots, with the current desktop drawn as a solid dot | Desktop numbers, with the current one coloured |
 
 ## Install
 
