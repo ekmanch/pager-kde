@@ -31,16 +31,37 @@
     <entry name="inactiveOpacity" type="Int">
       <default>100</default>
     </entry>
-    <entry name="size" type="Int">
+    <!-- Size, spacing and margin are kept per style, so each style has its
+         own defaults and keeps its own values when switching. Size is the dot
+         size for pills and dots, and the font size for numbers. -->
+    <entry name="pillsSize" type="Int">
       <default>10</default>
+    </entry>
+    <entry name="pillsSpacing" type="Int">
+      <default>10</default>
+    </entry>
+    <entry name="pillsMargin" type="Int">
+      <default>6</default>
     </entry>
     <entry name="pillLength" type="Int">
       <default>20</default>
     </entry>
-    <entry name="spacing" type="Int">
+    <entry name="dotsSize" type="Int">
       <default>10</default>
     </entry>
-    <entry name="margin" type="Int">
+    <entry name="dotsSpacing" type="Int">
+      <default>10</default>
+    </entry>
+    <entry name="dotsMargin" type="Int">
+      <default>6</default>
+    </entry>
+    <entry name="numbersSize" type="Int">
+      <default>14</default>
+    </entry>
+    <entry name="numbersSpacing" type="Int">
+      <default>10</default>
+    </entry>
+    <entry name="numbersMargin" type="Int">
       <default>6</default>
     </entry>
   </group>

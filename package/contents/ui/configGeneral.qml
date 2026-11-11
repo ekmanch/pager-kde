@@ -15,10 +15,19 @@ KCM.SimpleKCM {
     property string cfg_inactiveColor
     property alias cfg_activeOpacity: activeOpacity.value
     property alias cfg_inactiveOpacity: inactiveOpacity.value
-    property alias cfg_size: sizeSpin.value
     property alias cfg_pillLength: pillLengthSpin.value
-    property alias cfg_spacing: spacingSpin.value
-    property alias cfg_margin: marginSpin.value
+
+    // Size, spacing and margin are stored per style; the spin boxes below show
+    // and edit the ones of the selected style.
+    property int cfg_pillsSize
+    property int cfg_pillsSpacing
+    property int cfg_pillsMargin
+    property int cfg_dotsSize
+    property int cfg_dotsSpacing
+    property int cfg_dotsMargin
+    property int cfg_numbersSize
+    property int cfg_numbersSpacing
+    property int cfg_numbersMargin
 
     // Filled in by Plasma with the defaults from main.xml.
     property int cfg_styleDefault
@@ -28,54 +37,43 @@ KCM.SimpleKCM {
     property string cfg_inactiveColorDefault
     property int cfg_activeOpacityDefault
     property int cfg_inactiveOpacityDefault
-    property int cfg_sizeDefault
     property int cfg_pillLengthDefault
-    property int cfg_spacingDefault
-    property int cfg_marginDefault
+    property int cfg_pillsSizeDefault
+    property int cfg_pillsSpacingDefault
+    property int cfg_pillsMarginDefault
+    property int cfg_dotsSizeDefault
+    property int cfg_dotsSpacingDefault
+    property int cfg_dotsMarginDefault
+    property int cfg_numbersSizeDefault
+    property int cfg_numbersSpacingDefault
+    property int cfg_numbersMarginDefault
 
-    // Size settings are shared by all styles, but each style has its own
-    // defaults. Pills is the default style, so its defaults are the ones in
-    // main.xml; the other styles list theirs here.
-    readonly property var styleSizeKeys: ["size", "spacing", "margin"]
+    // Config key prefix of the selected style.
+    readonly property string stylePrefix: ["pills", "dots", "numbers"][styleCombo.currentIndex] ?? "pills"
 
-    function sizeDefaults(style) {
-        switch (style) {
-        case 1: // Dots
-            return { size: 10, spacing: 10, margin: 6 };
-        case 2: // Numbers
-            return { size: 14, spacing: 10, margin: 6 };
-        default: // Pills
-            return { size: cfg_sizeDefault, spacing: cfg_spacingDefault, margin: cfg_marginDefault };
-        }
+    function styleValue(name) {
+        return page["cfg_" + stylePrefix + name];
     }
 
-    // On a style switch, move each size setting that still sits at a style
-    // default to the new style's default. Custom values are left alone.
-    function switchStyleDefaults(style) {
-        const target = sizeDefaults(style);
-        for (const key of styleSizeKeys) {
-            const value = page["cfg_" + key];
-            const atDefault = [0, 1, 2].some(s => sizeDefaults(s)[key] === value);
-            if (atDefault) {
-                page["cfg_" + key] = target[key];
-            }
-        }
+    function setStyleValue(name, value) {
+        page["cfg_" + stylePrefix + name] = value;
     }
 
-    // Resets everything to the defaults of the selected style, keeping the
-    // style itself.
+    // Resets everything except the style, and only the selected style's
+    // size, spacing and margin.
     function restoreDefaults() {
-        const defaults = sizeDefaults(cfg_style);
         cfg_scrollEnabled = cfg_scrollEnabledDefault;
         cfg_wrapAround = cfg_wrapAroundDefault;
         cfg_activeColor = cfg_activeColorDefault;
         cfg_inactiveColor = cfg_inactiveColorDefault;
         cfg_activeOpacity = cfg_activeOpacityDefault;
         cfg_inactiveOpacity = cfg_inactiveOpacityDefault;
-        cfg_size = defaults.size;
-        cfg_pillLength = cfg_pillLengthDefault;
-        cfg_spacing = defaults.spacing;
-        cfg_margin = defaults.margin;
+        if (cfg_style === 0) {
+            cfg_pillLength = cfg_pillLengthDefault;
+        }
+        for (const name of ["Size", "Spacing", "Margin"]) {
+            setStyleValue(name, page["cfg_" + stylePrefix + name + "Default"]);
+        }
     }
 
     // A colour button plus a way back to the default. An empty string in the
@@ -143,9 +141,6 @@ KCM.SimpleKCM {
                 i18n("Dots — dots with solid active dot"),
                 i18n("Numbers")
             ]
-            // onActivated fires only for user picks, not when the saved
-            // style is loaded.
-            onActivated: index => page.switchStyleDefaults(index)
         }
 
         QQC2.CheckBox {
@@ -171,6 +166,8 @@ KCM.SimpleKCM {
             Kirigami.FormData.label: styleCombo.currentIndex === 2 ? i18n("Font size:") : i18n("Dot size:")
             from: 4
             to: 64
+            value: page.styleValue("Size")
+            onValueModified: page.setStyleValue("Size", value)
         }
 
         QQC2.SpinBox {
@@ -186,6 +183,8 @@ KCM.SimpleKCM {
             Kirigami.FormData.label: i18n("Spacing:")
             from: 0
             to: 64
+            value: page.styleValue("Spacing")
+            onValueModified: page.setStyleValue("Spacing", value)
         }
 
         QQC2.SpinBox {
@@ -193,6 +192,8 @@ KCM.SimpleKCM {
             Kirigami.FormData.label: i18n("Margin:")
             from: 0
             to: 64
+            value: page.styleValue("Margin")
+            onValueModified: page.setStyleValue("Margin", value)
         }
 
         ColorRow {

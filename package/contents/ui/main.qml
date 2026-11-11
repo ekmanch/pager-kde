@@ -18,15 +18,26 @@ PlasmoidItem {
     readonly property int style: Plasmoid.configuration.style
     readonly property bool vertical: Plasmoid.formFactor === PlasmaCore.Types.Vertical
 
-    readonly property int dotSize: Math.max(2, Plasmoid.configuration.size)
+    // Size, spacing and margin are stored per style.
+    readonly property int cfgSize: style === styleNumbers ? Plasmoid.configuration.numbersSize
+        : style === styleDots ? Plasmoid.configuration.dotsSize
+        : Plasmoid.configuration.pillsSize
+    readonly property int cfgSpacing: style === styleNumbers ? Plasmoid.configuration.numbersSpacing
+        : style === styleDots ? Plasmoid.configuration.dotsSpacing
+        : Plasmoid.configuration.pillsSpacing
+    readonly property int cfgMargin: style === styleNumbers ? Plasmoid.configuration.numbersMargin
+        : style === styleDots ? Plasmoid.configuration.dotsMargin
+        : Plasmoid.configuration.pillsMargin
+
+    readonly property int dotSize: Math.max(2, cfgSize)
     readonly property int pillLength: Math.max(dotSize, Plasmoid.configuration.pillLength)
     readonly property int pillThickness: Math.max(2, Math.round(dotSize * 0.6))
     // How strongly inactive pills and dots are filled, on top of the inactive
     // colour's own alpha. Translucent rather than a fixed grey, so it stays soft
     // over any panel or wallpaper and the active desktop stands out the most.
     readonly property real inactiveFillAlpha: 0.5
-    readonly property int spacing: Math.max(0, Plasmoid.configuration.spacing)
-    readonly property int margin: Math.max(0, Plasmoid.configuration.margin)
+    readonly property int spacing: Math.max(0, cfgSpacing)
+    readonly property int margin: Math.max(0, cfgMargin)
 
     // Pills mark the active desktop by shape already, so they default to white;
     // the other styles need the accent colour to tell it apart.
