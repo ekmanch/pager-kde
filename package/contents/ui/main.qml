@@ -261,13 +261,22 @@ PlasmoidItem {
                         anchors.centerIn: parent
                         visible: cell.isNumber
                         text: cell.index + 1
-                        color: cell.blendedColor
                         // Panel recolouring widgets (e.g. Panel Colorizer) assign a
-                        // colour to every Text in the panel, which silently drops the
-                        // binding above. Take the colour back whenever that happens.
+                        // colour to every Text in the panel. That would silently drop
+                        // a binding, and when it writes the colour the label already
+                        // has, no change signal fires to restore it. So the colour is
+                        // pushed in imperatively instead, and taken back whenever
+                        // something else changes it.
+                        color: cell.blendedColor
                         onColorChanged: {
                             if (!Qt.colorEqual(color, cell.blendedColor)) {
-                                color = Qt.binding(() => cell.blendedColor);
+                                color = cell.blendedColor;
+                            }
+                        }
+                        Connections {
+                            target: cell
+                            function onBlendedColorChanged() {
+                                label.color = cell.blendedColor;
                             }
                         }
                         font.family: Kirigami.Theme.defaultFont.family
