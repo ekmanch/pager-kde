@@ -4,7 +4,7 @@ Pager to switch between different virtual desktops for KDE Plasma 6.
 
 Three styles, selectable in the widget settings:
 
-- **Pills**: dots, with the current desktop drawn as a pill
+- **Pills**: softly filled dots, with the current desktop drawn as a solid white pill
 - **Dots**: ringed dots with a translucent fill, with the current desktop drawn as a solid dot
 - **Numbers**: plain desktop numbers, with the current one coloured
 

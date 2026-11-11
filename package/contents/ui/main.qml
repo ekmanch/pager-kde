@@ -30,8 +30,11 @@ PlasmoidItem {
     readonly property int spacing: Math.max(0, Plasmoid.configuration.spacing)
     readonly property int margin: Math.max(0, Plasmoid.configuration.margin)
 
+    // Pills mark the active desktop by shape already, so they default to white;
+    // the other styles need the accent colour to tell it apart.
     readonly property color activeColor: Plasmoid.configuration.activeColor !== ""
-        ? Plasmoid.configuration.activeColor : Kirigami.Theme.highlightColor
+        ? Plasmoid.configuration.activeColor
+        : style === stylePills ? "#ffffff" : Kirigami.Theme.highlightColor
     readonly property color inactiveColor: Plasmoid.configuration.inactiveColor !== ""
         ? Plasmoid.configuration.inactiveColor : "#ffffff"
     readonly property real activeOpacity: Plasmoid.configuration.activeOpacity / 100

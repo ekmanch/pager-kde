@@ -164,7 +164,8 @@ KCM.SimpleKCM {
         ColorRow {
             Kirigami.FormData.label: i18n("Active color:")
             value: page.cfg_activeColor
-            defaultColor: Kirigami.Theme.highlightColor
+            // Matches main.qml: white for pills, the accent colour otherwise.
+            defaultColor: styleCombo.currentIndex === 0 ? "#ffffff" : Kirigami.Theme.highlightColor
             onPicked: color => page.cfg_activeColor = color
         }
 
