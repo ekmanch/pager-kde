@@ -1,0 +1,23 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "ekmanch"
+            }
+        ],
+        "Category": "Windows and Tasks",
+        "Description": "Minimal virtual desktop pager with pill, dot and number styles",
+        "EnabledByDefault": true,
+        "Icon": "virtual-desktops",
+        "Id": "com.ekmanch.pager",
+        "License": "MIT",
+        "Name": "Pager",
+        "Version": "1.0.0",
+        "Website": "https://github.com/ekmanch/pager-kde"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-Provides": [
+        "org.kde.plasma.virtualdesktops"
+    ]
+}
