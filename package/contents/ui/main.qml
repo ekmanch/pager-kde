@@ -247,6 +247,14 @@ PlasmoidItem {
                         visible: cell.isNumber
                         text: cell.index + 1
                         color: cell.blendedColor
+                        // Panel recolouring widgets (e.g. Panel Colorizer) assign a
+                        // colour to every Text in the panel, which silently drops the
+                        // binding above. Take the colour back whenever that happens.
+                        onColorChanged: {
+                            if (!Qt.colorEqual(color, cell.blendedColor)) {
+                                color = Qt.binding(() => cell.blendedColor);
+                            }
+                        }
                         font.family: Kirigami.Theme.defaultFont.family
                         font.pixelSize: root.dotSize
                         textFormat: Text.PlainText
