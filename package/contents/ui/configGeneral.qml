@@ -33,18 +33,49 @@ KCM.SimpleKCM {
     property int cfg_spacingDefault
     property int cfg_marginDefault
 
+    // Size settings are shared by all styles, but each style has its own
+    // defaults. Pills is the default style, so its defaults are the ones in
+    // main.xml; the other styles list theirs here.
+    readonly property var styleSizeKeys: ["size", "spacing", "margin"]
+
+    function sizeDefaults(style) {
+        switch (style) {
+        case 1: // Dots
+            return { size: 10, spacing: 10, margin: 6 };
+        case 2: // Numbers
+            return { size: 14, spacing: 10, margin: 6 };
+        default: // Pills
+            return { size: cfg_sizeDefault, spacing: cfg_spacingDefault, margin: cfg_marginDefault };
+        }
+    }
+
+    // On a style switch, move each size setting that still sits at a style
+    // default to the new style's default. Custom values are left alone.
+    function switchStyleDefaults(style) {
+        const target = sizeDefaults(style);
+        for (const key of styleSizeKeys) {
+            const value = page["cfg_" + key];
+            const atDefault = [0, 1, 2].some(s => sizeDefaults(s)[key] === value);
+            if (atDefault) {
+                page["cfg_" + key] = target[key];
+            }
+        }
+    }
+
+    // Resets everything to the defaults of the selected style, keeping the
+    // style itself.
     function restoreDefaults() {
-        cfg_style = cfg_styleDefault;
+        const defaults = sizeDefaults(cfg_style);
         cfg_scrollEnabled = cfg_scrollEnabledDefault;
         cfg_wrapAround = cfg_wrapAroundDefault;
         cfg_activeColor = cfg_activeColorDefault;
         cfg_inactiveColor = cfg_inactiveColorDefault;
         cfg_activeOpacity = cfg_activeOpacityDefault;
         cfg_inactiveOpacity = cfg_inactiveOpacityDefault;
-        cfg_size = cfg_sizeDefault;
+        cfg_size = defaults.size;
         cfg_pillLength = cfg_pillLengthDefault;
-        cfg_spacing = cfg_spacingDefault;
-        cfg_margin = cfg_marginDefault;
+        cfg_spacing = defaults.spacing;
+        cfg_margin = defaults.margin;
     }
 
     // A colour button plus a way back to the default. An empty string in the
@@ -112,6 +143,9 @@ KCM.SimpleKCM {
                 i18n("Dots — dots with solid active dot"),
                 i18n("Numbers")
             ]
+            // onActivated fires only for user picks, not when the saved
+            // style is loaded.
+            onActivated: index => page.switchStyleDefaults(index)
         }
 
         QQC2.CheckBox {

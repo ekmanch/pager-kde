@@ -32,16 +32,16 @@
       <default>100</default>
     </entry>
     <entry name="size" type="Int">
-      <default>14</default>
+      <default>10</default>
     </entry>
     <entry name="pillLength" type="Int">
-      <default>26</default>
+      <default>20</default>
     </entry>
     <entry name="spacing" type="Int">
-      <default>12</default>
+      <default>10</default>
     </entry>
     <entry name="margin" type="Int">
-      <default>4</default>
+      <default>6</default>
     </entry>
   </group>
 </kcfg>
