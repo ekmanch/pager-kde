@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import org.kde.kcmutils as KCM
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasmoid
@@ -64,6 +65,52 @@ PlasmoidItem {
             arguments: [new DBus.int32(index + 1)]
         });
     }
+
+    function callDesktopManager(member, args) {
+        DBus.SessionBus.asyncCall({
+            service: "org.kde.KWin",
+            path: "/VirtualDesktopManager",
+            iface: "org.kde.KWin.VirtualDesktopManager",
+            member: member,
+            arguments: args
+        });
+    }
+
+    // Adds a desktop after the last one.
+    function addDesktop() {
+        callDesktopManager("createDesktop", [
+            new DBus.uint32(desktopCount),
+            new DBus.string(i18n("Desktop %1", desktopCount + 1))
+        ]);
+    }
+
+    // Removes the last desktop; KWin moves its windows to the one before it.
+    function removeDesktop() {
+        if (desktopCount < 2) {
+            return;
+        }
+        callDesktopManager("removeDesktop", [
+            new DBus.string(String(desktopInfo.desktopIds[desktopCount - 1]))
+        ]);
+    }
+
+    Plasmoid.contextualActions: [
+        PlasmaCore.Action {
+            text: i18n("Add Virtual Desktop")
+            icon.name: "list-add"
+            onTriggered: root.addDesktop()
+        },
+        PlasmaCore.Action {
+            text: i18n("Remove Virtual Desktop")
+            icon.name: "list-remove"
+            enabled: root.desktopCount > 1
+            onTriggered: root.removeDesktop()
+        },
+        PlasmaCore.Action {
+            text: i18n("Configure Virtual Desktops…")
+            onTriggered: KCM.KCMLauncher.openSystemSettings("kcm_kwin_virtualdesktops")
+        }
+    ]
 
     function step(delta) {
         const n = desktopCount;
