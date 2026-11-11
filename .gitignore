@@ -1,0 +1,13 @@
+# Packaged widget archives
+*.plasmoid
+
+# QML compiler caches
+*.qmlc
+*.jsc
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*~
+.directory
